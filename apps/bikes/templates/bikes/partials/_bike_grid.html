@@ -1,0 +1,64 @@
+{% load static %}
+{% load humanize %}
+
+{% for bike in bikes %}
+<a href="{% url 'bikes:detail' bike.slug %}" class="card-product group animate-fade-in-up" style="animation-delay: {{ forloop.counter0 }}00ms;">
+    <!-- Image -->
+    <div class="relative overflow-hidden bg-astral-gray-50">
+        {% if bike.image %}
+        <img src="{{ bike.image.url }}" alt="{{ bike.name }}" class="card-product-image" loading="lazy">
+        {% else %}
+        <div class="aspect-[4/5] bg-gradient-to-br from-astral-gray-100 to-astral-gray-200 flex items-center justify-center">
+            <svg class="w-20 h-20 text-astral-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="7" cy="17" r="3" stroke-width="1"/>
+                <circle cx="17" cy="17" r="3" stroke-width="1"/>
+                <path stroke-width="1" d="M7 17l3-10h4l3 10M10 7l2-4"/>
+            </svg>
+        </div>
+        {% endif %}
+
+        <!-- Stock Badge -->
+        <div class="absolute top-4 right-4"
+             hx-get="{% url 'bikes:stock_badge' bike.pk %}"
+             hx-trigger="load, every 15s"
+             hx-swap="innerHTML">
+            <div class="skeleton-text w-20 h-5"></div>
+        </div>
+
+        <!-- Hover Overlay -->
+        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100">
+            <span class="btn-primary text-xs py-2.5 px-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                Lihat Detail
+            </span>
+        </div>
+    </div>
+
+    <!-- Info -->
+    <div class="p-5">
+        <div class="flex items-start justify-between gap-4">
+            <div>
+                <p class="text-xs text-astral-gray-400 font-display uppercase tracking-[0.15em]">{{ bike.category.name }}</p>
+                <h3 class="font-display font-bold text-base mt-1 group-hover:underline underline-offset-4 decoration-2">{{ bike.name }}</h3>
+            </div>
+            <p class="font-mono font-bold text-sm whitespace-nowrap">
+                Rp {{ bike.price_per_hour|intcomma }}<span class="text-astral-gray-400 font-normal">/jam</span>
+            </p>
+        </div>
+        <div class="flex items-center gap-3 mt-3">
+            <span class="text-xs text-astral-gray-400 font-mono uppercase">{{ bike.get_terrain_type_display }}</span>
+            <span class="text-astral-gray-300">·</span>
+            <span class="text-xs text-astral-gray-400 font-mono">{{ bike.weight_kg }}kg</span>
+            <span class="text-astral-gray-300">·</span>
+            <span class="text-xs text-astral-gray-400 font-mono">{{ bike.frame_material }}</span>
+        </div>
+    </div>
+</a>
+{% empty %}
+<div class="col-span-full py-20 text-center">
+    <svg class="w-16 h-16 text-astral-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 2a10 10 0 100 20 10 10 0 000-20z"/>
+    </svg>
+    <p class="font-display font-bold text-lg">Belum Ada Sepeda</p>
+    <p class="text-astral-gray-400 text-sm mt-2">Koleksi sepeda sedang dipersiapkan.</p>
+</div>
+{% endfor %}

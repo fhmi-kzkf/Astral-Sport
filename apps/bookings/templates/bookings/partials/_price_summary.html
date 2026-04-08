@@ -1,0 +1,51 @@
+{% load humanize %}
+
+<div class="animate-fade-in-up">
+    <div class="divider-bold mb-8"></div>
+
+    <h3 class="font-display font-bold text-sm uppercase tracking-[0.15em] mb-6">Review Harga</h3>
+
+    <div class="bg-astral-gray-50 p-6 space-y-4">
+        <div class="flex items-center justify-between">
+            <span class="text-sm text-astral-gray-500 font-display">Sepeda</span>
+            <span class="font-display font-bold text-sm">{{ bike.name }}</span>
+        </div>
+        <div class="flex items-center justify-between">
+            <span class="text-sm text-astral-gray-500 font-display">Durasi</span>
+            <span class="font-mono font-semibold text-sm">{{ duration }} jam</span>
+        </div>
+        <div class="divider my-4"></div>
+        <div class="flex items-center justify-between">
+            <span class="font-display font-bold text-base uppercase">Total</span>
+            <span class="font-mono font-bold text-2xl">Rp {{ total_price|intcomma }}</span>
+        </div>
+    </div>
+
+    <!-- Customer Name Input -->
+    <div class="mt-6">
+        <label class="block text-xs font-display font-bold uppercase tracking-[0.15em] text-astral-gray-500 mb-2">
+            Nama Anda (opsional)
+        </label>
+        <input type="text" id="customer-name"
+               placeholder="Masukkan nama Anda"
+               class="w-full px-4 py-3 border-2 border-astral-gray-200 text-sm font-body
+                      focus:border-astral-black focus:outline-none transition-colors duration-200
+                      placeholder:text-astral-gray-400">
+    </div>
+
+    <!-- Confirm Button -->
+    <div class="mt-8">
+        <button class="btn-primary w-full text-center"
+                hx-post="{% url 'bookings:confirm_whatsapp' %}"
+                hx-target="#price-section"
+                hx-swap="innerHTML"
+                hx-vals='{"bike_id": "{{ bike.pk }}", "duration": "{{ duration }}", "total_price": "{{ total_price }}"}'
+                hx-include="#customer-name"
+                onclick="document.getElementById('step-3-indicator').classList.replace('bg-astral-gray-200', 'bg-astral-black'); document.getElementById('step-3-indicator').classList.replace('text-astral-gray-500', 'text-white');">
+            Konfirmasi via WhatsApp
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+        </button>
+    </div>
+</div>

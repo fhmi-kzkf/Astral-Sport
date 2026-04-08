@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Katalog Sepeda — ASTRAL SPORT{% endblock %}
+
+{% block content %}
+
+<!-- Spacer for fixed navbar -->
+<div class="h-20"></div>
+
+<!-- ===== CATALOG HEADER ===== -->
+<section class="pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="animate-fade-in-up">
+            <p class="section-subheader">Katalog</p>
+            <h1 class="section-header mt-2">SEMUA<br>SEPEDA</h1>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="mt-12 flex flex-wrap gap-3 animate-fade-in-up" style="animation-delay: 200ms;">
+            <button hx-get="{% url 'bikes:catalog' %}"
+                    hx-target="#bike-grid"
+                    hx-swap="innerHTML"
+                    hx-push-url="true"
+                    class="px-5 py-2.5 text-xs font-display font-bold uppercase tracking-[0.15em] transition-all duration-300 {% if not active_category %}bg-astral-black text-white{% else %}bg-astral-gray-100 text-astral-black hover:bg-astral-gray-200{% endif %}">
+                Semua
+            </button>
+            {% for category in categories %}
+            <button hx-get="{% url 'bikes:catalog' %}?category={{ category.slug }}"
+                    hx-target="#bike-grid"
+                    hx-swap="innerHTML"
+                    hx-push-url="true"
+                    class="px-5 py-2.5 text-xs font-display font-bold uppercase tracking-[0.15em] transition-all duration-300 {% if active_category == category.slug %}bg-astral-black text-white{% else %}bg-astral-gray-100 text-astral-black hover:bg-astral-gray-200{% endif %}">
+                {{ category.name }}
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ===== BIKE GRID ===== -->
+<section class="pb-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1" id="bike-grid">
+            {% include 'bikes/partials/_bike_grid.html' %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

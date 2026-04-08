@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Sewa {{ bike.name }} — ASTRAL SPORT{% endblock %}
+
+{% block content %}
+
+<!-- Spacer -->
+<div class="h-20"></div>
+
+<div class="max-w-3xl mx-auto px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-8 animate-fade-in">
+        <ol class="flex items-center gap-2 text-xs font-display uppercase tracking-[0.15em]">
+            <li><a href="{% url 'core:home' %}" class="text-astral-gray-400 hover:text-astral-black transition-colors">Home</a></li>
+            <li class="text-astral-gray-300">/</li>
+            <li><a href="{% url 'bikes:catalog' %}" class="text-astral-gray-400 hover:text-astral-black transition-colors">Katalog</a></li>
+            <li class="text-astral-gray-300">/</li>
+            <li><a href="{% url 'bikes:detail' bike.slug %}" class="text-astral-gray-400 hover:text-astral-black transition-colors">{{ bike.name }}</a></li>
+            <li class="text-astral-gray-300">/</li>
+            <li class="text-astral-black font-bold">Booking</li>
+        </ol>
+    </nav>
+
+    <!-- Page Title -->
+    <div class="mb-12 animate-fade-in-up">
+        <p class="section-subheader">Booking</p>
+        <h1 class="section-header mt-2 text-3xl md:text-4xl">SEWA<br>{{ bike.name|upper }}</h1>
+    </div>
+
+    <!-- 3-Step Progress -->
+    <div class="flex items-center gap-0 mb-12 animate-fade-in-up" style="animation-delay: 200ms;" x-data="{ step: 1 }">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-astral-black text-white flex items-center justify-center font-mono font-bold text-xs">1</div>
+            <span class="text-xs font-display font-bold uppercase tracking-[0.1em] hidden sm:inline">Pilih Durasi</span>
+        </div>
+        <div class="flex-1 h-px bg-astral-gray-200 mx-4"></div>
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-astral-gray-200 text-astral-gray-500 flex items-center justify-center font-mono font-bold text-xs" id="step-2-indicator">2</div>
+            <span class="text-xs font-display font-bold uppercase tracking-[0.1em] text-astral-gray-400 hidden sm:inline">Review Harga</span>
+        </div>
+        <div class="flex-1 h-px bg-astral-gray-200 mx-4"></div>
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-astral-gray-200 text-astral-gray-500 flex items-center justify-center font-mono font-bold text-xs" id="step-3-indicator">3</div>
+            <span class="text-xs font-display font-bold uppercase tracking-[0.1em] text-astral-gray-400 hidden sm:inline">Konfirmasi</span>
+        </div>
+    </div>
+
+    <!-- Bike Summary Card -->
+    <div class="flex items-center gap-6 p-6 bg-astral-gray-50 mb-10 animate-fade-in-up" style="animation-delay: 300ms;">
+        <div class="w-24 h-24 bg-astral-gray-200 flex-shrink-0 overflow-hidden">
+            {% if bike.image %}
+            <img src="{{ bike.image.url }}" alt="{{ bike.name }}" class="w-full h-full object-cover">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center">
+                <svg class="w-8 h-8 text-astral-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <circle cx="7" cy="17" r="3" stroke-width="1"/>
+                    <circle cx="17" cy="17" r="3" stroke-width="1"/>
+                    <path stroke-width="1" d="M7 17l3-10h4l3 10"/>
+                </svg>
+            </div>
+            {% endif %}
+        </div>
+        <div>
+            <p class="text-xs text-astral-gray-400 font-display uppercase tracking-[0.15em]">{{ bike.category.name }}</p>
+            <h2 class="font-display font-bold text-lg">{{ bike.name }}</h2>
+            <p class="font-mono text-sm mt-1">
+                Rp {{ bike.price_per_hour|intcomma }}<span class="text-astral-gray-400">/jam</span>
+                <span class="text-astral-gray-300 mx-2">·</span>
+                Rp {{ bike.price_per_day|intcomma }}<span class="text-astral-gray-400">/hari</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Step 1: Duration Picker -->
+    <div class="animate-fade-in-up" style="animation-delay: 400ms;" id="booking-step-1">
+        <h3 class="font-display font-bold text-sm uppercase tracking-[0.15em] mb-6">Pilih Durasi Sewa</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="duration-grid">
+            {% for value, label in duration_choices %}
+            <button type="button"
+                    class="duration-option p-4 border-2 border-astral-gray-200 text-center
+                           hover:border-astral-black transition-all duration-200 cursor-pointer
+                           focus:border-astral-black focus:bg-astral-gray-50"
+                    hx-post="{% url 'bookings:calculate_price' %}"
+                    hx-target="#price-section"
+                    hx-swap="innerHTML"
+                    hx-vals='{"bike_id": "{{ bike.pk }}", "duration": "{{ value }}"}'
+                    onclick="document.querySelectorAll('.duration-option').forEach(el => el.classList.remove('border-astral-black', 'bg-astral-gray-50')); this.classList.add('border-astral-black', 'bg-astral-gray-50'); document.getElementById('step-2-indicator').classList.replace('bg-astral-gray-200', 'bg-astral-black'); document.getElementById('step-2-indicator').classList.replace('text-astral-gray-500', 'text-white');">
+                <p class="font-mono font-bold text-lg">{{ value }}h</p>
+                <p class="text-xs text-astral-gray-500 font-display mt-1">{{ label }}</p>
+            </button>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Step 2 & 3: Price & Confirm (loaded by HTMX) -->
+    <div id="price-section" class="mt-10">
+        <!-- Will be filled by HTMX -->
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}{{ bike.name }} — ASTRAL SPORT{% endblock %}
+
+{% block content %}
+
+<!-- Spacer -->
+<div class="h-20"></div>
+
+<div class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-8 animate-fade-in">
+        <ol class="flex items-center gap-2 text-xs font-display uppercase tracking-[0.15em]">
+            <li><a href="{% url 'core:home' %}" class="text-astral-gray-400 hover:text-astral-black transition-colors">Home</a></li>
+            <li class="text-astral-gray-300">/</li>
+            <li><a href="{% url 'bikes:catalog' %}" class="text-astral-gray-400 hover:text-astral-black transition-colors">Katalog</a></li>
+            <li class="text-astral-gray-300">/</li>
+            <li class="text-astral-black font-bold">{{ bike.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-16">
+        <!-- Product Image -->
+        <div class="animate-fade-in-up">
+            <div class="relative bg-astral-gray-50 aspect-square overflow-hidden">
+                {% if bike.image %}
+                <img src="{{ bike.image.url }}" alt="{{ bike.name }}" class="w-full h-full object-cover">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-astral-gray-100 to-astral-gray-200">
+                    <svg class="w-32 h-32 text-astral-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="7" cy="17" r="3" stroke-width="0.75"/>
+                        <circle cx="17" cy="17" r="3" stroke-width="0.75"/>
+                        <path stroke-width="0.75" d="M7 17l3-10h4l3 10M10 7l2-4"/>
+                    </svg>
+                </div>
+                {% endif %}
+
+                <!-- Stock Badge -->
+                <div class="absolute top-6 right-6"
+                     hx-get="{% url 'bikes:stock_badge' bike.pk %}"
+                     hx-trigger="load, every 10s"
+                     hx-swap="innerHTML">
+                    <div class="skeleton-text w-24 h-6"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Info -->
+        <div class="py-8 lg:py-0 animate-fade-in-up" style="animation-delay: 200ms;">
+            <p class="text-xs text-astral-gray-400 font-display uppercase tracking-[0.2em]">{{ bike.category.name }}</p>
+            <h1 class="font-display font-black text-3xl md:text-4xl lg:text-5xl uppercase tracking-tight mt-2 leading-none">
+                {{ bike.name }}
+            </h1>
+
+            {% if bike.tagline %}
+            <p class="text-astral-gray-500 text-sm mt-3 italic">{{ bike.tagline }}</p>
+            {% endif %}
+
+            <!-- Pricing -->
+            <div class="mt-8 flex items-baseline gap-6">
+                <div>
+                    <span class="font-mono font-bold text-2xl">Rp {{ bike.price_per_hour|intcomma }}</span>
+                    <span class="text-astral-gray-400 text-sm font-mono">/jam</span>
+                </div>
+                <div class="text-astral-gray-400">
+                    <span class="font-mono font-medium text-lg">Rp {{ bike.price_per_day|intcomma }}</span>
+                    <span class="text-sm font-mono">/hari</span>
+                </div>
+            </div>
+
+            <div class="divider-bold mt-8 mb-8"></div>
+
+            <!-- Description -->
+            <p class="text-astral-gray-600 text-sm leading-relaxed">
+                {{ bike.description }}
+            </p>
+
+            <!-- Specs Table -->
+            <div class="mt-8 space-y-0">
+                <h3 class="font-display font-bold text-xs uppercase tracking-[0.2em] text-astral-gray-400 mb-4">Spesifikasi Teknis</h3>
+                <div class="divide-y divide-astral-gray-100">
+                    <div class="flex items-center justify-between py-3">
+                        <span class="text-xs text-astral-gray-500 font-display uppercase tracking-wider">Terrain</span>
+                        <span class="font-mono font-semibold text-sm">{{ bike.get_terrain_type_display }}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-3">
+                        <span class="text-xs text-astral-gray-500 font-display uppercase tracking-wider">Berat</span>
+                        <span class="font-mono font-semibold text-sm">{{ bike.weight_kg }} kg</span>
+                    </div>
+                    <div class="flex items-center justify-between py-3">
+                        <span class="text-xs text-astral-gray-500 font-display uppercase tracking-wider">Frame</span>
+                        <span class="font-mono font-semibold text-sm">{{ bike.frame_material }}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-3">
+                        <span class="text-xs text-astral-gray-500 font-display uppercase tracking-wider">Gear</span>
+                        <span class="font-mono font-semibold text-sm">{{ bike.gear_system }}</span>
+                    </div>
+                    <div class="flex items-center justify-between py-3">
+                        <span class="text-xs text-astral-gray-500 font-display uppercase tracking-wider">Wheel</span>
+                        <span class="font-mono font-semibold text-sm">{{ bike.wheel_size }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Insights -->
+            <div class="mt-8 bg-astral-gray-50 p-6">
+                <h3 class="font-display font-bold text-xs uppercase tracking-[0.2em] text-astral-gray-400 mb-4">
+                    Data Insights · {{ sample_distance }} km ride
+                </h3>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <p class="font-mono font-bold text-2xl">{{ calories }}</p>
+                        <p class="text-xs text-astral-gray-500 font-display uppercase tracking-wider mt-1">Kalori Terbakar</p>
+                    </div>
+                    <div>
+                        <p class="font-mono font-bold text-2xl">{{ co2_saved }}g</p>
+                        <p class="text-xs text-astral-gray-500 font-display uppercase tracking-wider mt-1">CO₂ Dihemat</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="mt-10 space-y-3">
+                {% if bike.is_available %}
+                <a href="{% url 'bookings:create' bike.slug %}" class="btn-primary w-full text-center">
+                    Sewa Sekarang
+                </a>
+                {% else %}
+                <button disabled class="btn-primary w-full text-center opacity-40 cursor-not-allowed">
+                    Stok Habis
+                </button>
+                {% endif %}
+                <a href="{% url 'bikes:catalog' %}" class="btn-ghost w-full justify-center">
+                    <svg class="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                    <span>Kembali ke Katalog</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,266 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   ASTRAL SPORT — Design System
+   Ultra-Minimalist, Bold, Clean
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: #000000;
+  color: #FFFFFF;
+}
+
+@layer components {
+  /* === Buttons === */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4 
+           bg-black text-white font-bold 
+           text-sm uppercase tracking-widest
+           transition-all duration-300;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .btn-primary:hover {
+    @apply bg-neutral-800;
+  }
+
+  .btn-primary:active {
+    transform: scale(0.97);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-4 
+           bg-transparent text-black font-bold 
+           text-sm uppercase tracking-widest
+           border-2 border-black
+           transition-all duration-300;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-black text-white;
+  }
+
+  .btn-secondary:active {
+    transform: scale(0.97);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 
+           text-black font-semibold 
+           text-sm uppercase
+           transition-all duration-300;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.1em;
+  }
+
+  .btn-ghost:hover {
+    letter-spacing: 0.2em;
+  }
+
+  /* === Cards === */
+  .card-product {
+    @apply relative bg-white overflow-hidden transition-all duration-500 cursor-pointer;
+  }
+
+  .card-product:hover .card-product-image {
+    transform: scale(1.05);
+  }
+
+  .card-product-image {
+    @apply w-full object-cover transition-transform duration-700;
+    aspect-ratio: 4/5;
+  }
+
+  /* === Stock Badges === */
+  .stock-badge {
+    @apply inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .stock-normal {
+    @apply text-neutral-500;
+  }
+
+  .stock-low {
+    @apply text-black font-bold;
+  }
+
+  .stock-empty {
+    @apply text-neutral-400 line-through;
+  }
+
+  /* === Skeleton Screens === */
+  .skeleton {
+    @apply relative overflow-hidden rounded;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton 1.5s ease-in-out infinite;
+  }
+
+  .skeleton-text {
+    @apply rounded;
+    height: 1rem;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton 1.5s ease-in-out infinite;
+  }
+
+  .skeleton-title {
+    @apply rounded;
+    height: 2rem;
+    width: 75%;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton 1.5s ease-in-out infinite;
+  }
+
+  .skeleton-image {
+    @apply w-full rounded;
+    aspect-ratio: 4/5;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton 1.5s ease-in-out infinite;
+  }
+
+  .skeleton-card {
+    @apply space-y-4;
+  }
+
+  /* === Section Headers === */
+  .section-header {
+    @apply text-4xl md:text-5xl lg:text-6xl tracking-tight leading-none uppercase font-black;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .section-subheader {
+    @apply text-neutral-500 text-sm md:text-base uppercase mt-3;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.2em;
+  }
+
+  /* === Dividers === */
+  .divider {
+    @apply w-full bg-neutral-200;
+    height: 1px;
+  }
+
+  .divider-bold {
+    @apply w-full bg-black;
+    height: 2px;
+  }
+
+  /* === Chat Widget === */
+  .chat-widget {
+    @apply fixed z-50;
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+
+  .chat-bubble {
+    @apply w-14 h-14 rounded-full bg-black text-white
+           flex items-center justify-center cursor-pointer
+           shadow-2xl transition-all duration-300;
+  }
+
+  .chat-bubble:hover {
+    transform: scale(1.1);
+  }
+
+  .chat-bubble:active {
+    transform: scale(0.95);
+  }
+
+  .chat-panel {
+    @apply absolute bg-white border-2 border-black flex flex-col overflow-hidden;
+    bottom: 5rem;
+    right: 0;
+    width: 380px;
+    max-height: 520px;
+    animation: bounceIn 0.6s ease-out forwards;
+    transform-origin: bottom right;
+  }
+
+  /* === WhatsApp Float === */
+  .wa-float {
+    @apply fixed z-50 flex items-center gap-3 px-5 py-3
+           text-white font-bold text-sm rounded-full shadow-2xl
+           transition-all duration-300;
+    font-family: 'Inter', sans-serif;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    background-color: #25D366;
+  }
+
+  .wa-float:hover {
+    transform: scale(1.05);
+  }
+
+  .wa-float:active {
+    transform: scale(0.95);
+  }
+}
+
+/* === Scrollbar === */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #d4d4d4;
+  border-radius: 9999px;
+}
+
+/* === Keyframes === */
+@keyframes skeleton {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: scale(0.3); }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* === Animation initial state === */
+.animate-on-scroll {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+}
+
+/* === Custom Marquee === */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}

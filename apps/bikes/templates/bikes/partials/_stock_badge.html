@@ -1,0 +1,8 @@
+<span class="stock-badge {{ bike.stock_urgency }}">
+    {% if bike.available_units == 0 %}
+    <span class="w-2 h-2 rounded-full bg-astral-gray-400 inline-block"></span>
+    {% elif bike.available_units <= 2 %}
+    <span class="w-2 h-2 rounded-full bg-astral-black animate-pulse-subtle inline-block"></span>
+    {% endif %}
+    <span class="bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-sm">{{ bike.stock_label }}</span>
+</span>
